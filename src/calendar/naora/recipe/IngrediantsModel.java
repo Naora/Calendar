@@ -15,14 +15,14 @@ import javax.swing.table.AbstractTableModel;
 public class IngrediantsModel extends AbstractTableModel {
     
     private ArrayList<Ingrediant> ingrediants;
-    private String [] headers = {"Ingrediant","Quantité","Type"};
+    private final String [] headers = {"Ingrediant","Quantité","Type"};
     
     public IngrediantsModel(){
         this(new ArrayList<>());
     }
     
     public IngrediantsModel(ArrayList<Ingrediant> ingrediants){
-        this.ingrediants = ingrediants;
+        this.ingrediants = (ArrayList<Ingrediant>)ingrediants.clone();
     }
     
     public void addRow(){
@@ -55,7 +55,7 @@ public class IngrediantsModel extends AbstractTableModel {
         switch(columnIndex){
             case 0: return ingrediants.get(rowIndex).getName();
             case 1: return ingrediants.get(rowIndex).getQuantity();
-            case 2: return ingrediants.get(rowIndex).getTypeName();
+            case 2: return ingrediants.get(rowIndex).getType().name();
             default: return new Object();
         }    
     }
@@ -69,5 +69,19 @@ public class IngrediantsModel extends AbstractTableModel {
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return true;
     }
-    
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        switch(columnIndex){
+            case 0: 
+                ingrediants.get(rowIndex).setName(aValue.toString());
+                break;
+            case 1: 
+                ingrediants.get(rowIndex).setQuantity((double)aValue);
+                break;
+            case 2: 
+                ingrediants.get(rowIndex).setType((Ingrediant.Type)aValue);
+                break;
+        }  
+    }
 }

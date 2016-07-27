@@ -5,6 +5,16 @@
  */
 package calendar.naora.recipe;
 
+import java.awt.Component;
+import javax.swing.AbstractCellEditor;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
+
 /**
  *
  * @author Nao
@@ -15,6 +25,28 @@ public class RecipeDialog extends javax.swing.JDialog {
     private TagsModel tagsModel;
     private IngrediantsModel ingrediantsModel;
 
+    
+    private class SpinnerCellEditor extends AbstractCellEditor implements TableCellEditor {
+        
+        private final JSpinner component;
+
+        public SpinnerCellEditor() {
+            component = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 999.9, 0.5));
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return component.getValue();
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) { 
+            component.setValue(value);
+            return component;
+        }
+        
+    }
+    
     /**
      * Creates new form RecipeDialog
      *
@@ -28,18 +60,25 @@ public class RecipeDialog extends javax.swing.JDialog {
     public RecipeDialog(java.awt.Frame parent, boolean modal, Recipe r) {
         super(parent, modal);
         recipe = r;
-        init();
-        initComponents();
-    }
-    
-    private void init(){
         tagsModel = new TagsModel(recipe.getTags());
         ingrediantsModel = new IngrediantsModel(recipe.getIngrediants());
-        
-        ingrediants.getColumnModel().getColumn(2);
-        
+        initComponents();
+        initCell();
     }
-    
+
+    private void initCell() {
+        TableColumn quantityColumn = ingrediants.getColumnModel().getColumn(1);
+        TableColumn typeColumn = ingrediants.getColumnModel().getColumn(2);
+
+        quantityColumn.setCellEditor(new SpinnerCellEditor());
+
+        JComboBox<Ingrediant.Type> combo = new JComboBox<>();
+        for (Ingrediant.Type value : Ingrediant.Type.values()) {
+            combo.addItem(value);
+        }
+        typeColumn.setCellEditor(new DefaultCellEditor(combo));
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -174,13 +213,14 @@ public class RecipeDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addTag)
-                    .addComponent(deleteTags)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(addIngrediant)
-                        .addComponent(deleteIngrediants)))
+                        .addComponent(deleteIngrediants))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addTag)
+                        .addComponent(deleteTags)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)

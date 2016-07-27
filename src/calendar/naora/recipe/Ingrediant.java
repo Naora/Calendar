@@ -10,22 +10,35 @@ package calendar.naora.recipe;
  * @author Nao
  */
 public class Ingrediant {
-    
-    public static final int TYPE_MG = 0;
-    public static final int TYPE_G = 1;
-    public static final int TYPE_KG = 2;
-    public static final int TYPE_L = 3;
-    public static final int TYPE_ML = 4;
-    
-    private String name;
-    private float quantity;
-    private int type;
-    
-    public Ingrediant(){
-        this("Ingrediant", 0.0f, TYPE_G);
+
+    public enum Type {
+        MG("Milligramme"),
+        G("Gramme"),
+        KG("Kilogramme"),
+        L("Litre"),
+        ML("Millilitre");
+        
+        private String name = "";
+
+        private Type(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
-    
-    public Ingrediant(String name, float quantity, int type){
+
+    private String name;
+    private double quantity;
+    private Type type;
+
+    public Ingrediant() {
+        this("Ingrediant", 0.0f, Type.G);
+    }
+
+    public Ingrediant(String name, double quantity, Type type) {
         this.name = name;
         this.quantity = quantity;
         this.type = type;
@@ -39,31 +52,19 @@ public class Ingrediant {
         this.name = name;
     }
 
-    public float getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(float quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 
-    public int getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Type type) {
         this.type = type;
     }
-    
-    public String getTypeName(){
-        switch(type){
-            case TYPE_G: return "Gramme";
-            case TYPE_KG: return "Kilogramme";
-            case TYPE_L: return "Litre";
-            case TYPE_MG: return "Milligramme";
-            case TYPE_ML: return "Millilitre";
-            default: return "Type Inconnue";
-        }
-    }
-    
 }

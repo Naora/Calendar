@@ -6,7 +6,6 @@
 package calendar.naora.recipe;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -22,7 +21,7 @@ public class TagsModel extends AbstractTableModel {
     }
 
     public TagsModel(ArrayList<String> tags) {
-        this.tags = tags;
+        this.tags = (ArrayList<String>) tags.clone();
     }
 
     public ArrayList<String> getTags() {
