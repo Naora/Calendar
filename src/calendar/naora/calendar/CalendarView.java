@@ -5,6 +5,9 @@
  */
 package calendar.naora.calendar;
 
+import calendar.naora.dnd.RecipeTransferHandler;
+import java.awt.event.KeyEvent;
+
 /**
  *
  * @author Nao
@@ -24,6 +27,7 @@ public class CalendarView extends javax.swing.JPanel {
     public CalendarView(CalendarModel c) {
         calendarModel = c;
         initComponents();
+        calendar.setTransferHandler(new RecipeTransferHandler());
         updateWindow();
     }
     
@@ -42,7 +46,7 @@ public class CalendarView extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        calendar = new javax.swing.JTable();
         nextWeek = new javax.swing.JButton();
         previousWeek = new javax.swing.JButton();
         actualWeek = new javax.swing.JButton();
@@ -51,10 +55,17 @@ public class CalendarView extends javax.swing.JPanel {
 
         setMinimumSize(new java.awt.Dimension(650, 200));
 
-        jTable1.setModel(calendarModel);
-        jTable1.setRowHeight(30);
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
+        calendar.setModel(calendarModel);
+        calendar.setDragEnabled(true);
+        calendar.setRowHeight(30);
+        calendar.setRowSelectionAllowed(false);
+        calendar.getTableHeader().setReorderingAllowed(false);
+        calendar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                calendarKeyPressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(calendar);
 
         nextWeek.setText(">>");
         nextWeek.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -136,11 +147,20 @@ public class CalendarView extends javax.swing.JPanel {
         calendarModel.actualWeek();
         updateWindow();
     }//GEN-LAST:event_actualWeekMouseClicked
+
+    private void calendarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_calendarKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_DELETE){
+            int row = calendar.getSelectedRow();
+            int column = calendar.getSelectedColumn();
+            
+            calendarModel.removeValueAt(row, column);
+        }
+    }//GEN-LAST:event_calendarKeyPressed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton actualWeek;
+    private javax.swing.JTable calendar;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel month;
     private javax.swing.JButton nextWeek;
     private javax.swing.JButton previousWeek;

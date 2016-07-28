@@ -5,7 +5,6 @@
  */
 package calendar.naora.calendar;
 
-
 import calendar.naora.recipe.Recipe;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -27,35 +26,35 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
     public CalendarModel() {
         this(Calendar.getInstance());
     }
-    
-    public CalendarModel(Calendar c){
+
+    public CalendarModel(Calendar c) {
         calendar = c;
         recipes = new HashMap<>();
     }
-    
-    public void nextWeek(){
+
+    public void nextWeek() {
         calendar.add(Calendar.WEEK_OF_MONTH, 1);
         fireTableStructureChanged();
     }
-    
-    public void previousWeek(){
+
+    public void previousWeek() {
         calendar.add(Calendar.WEEK_OF_MONTH, -1);
         fireTableStructureChanged();
     }
-    
-    public void actualWeek(){
+
+    public void actualWeek() {
         calendar = Calendar.getInstance();
         fireTableStructureChanged();
     }
-    
+
     public String getMonth() {
         return calendar.getDisplayName(Calendar.MONTH, Calendar.LONG_FORMAT, Locale.getDefault());
     }
-    
+
     public String getYear() {
         return String.valueOf(calendar.get(Calendar.YEAR));
     }
-    
+
     @Override
     public int getRowCount() {
         return 2;
@@ -67,22 +66,42 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        
-       int day = calendar.getFirstDayOfWeek() + columnIndex;
-       calendar.set(Calendar.DAY_OF_WEEK, day);
-       int index =  Integer.parseInt(sdf.format(calendar.getTime())+rowIndex);
-       
-       String result ="";
-       if(recipes.get(index) != null)
-           result = recipes.get(index).getName();
-       return result;
-    }
-
-    @Override
     public String getColumnName(int column) {
         int day = calendar.getFirstDayOfWeek() + column;
         calendar.set(Calendar.DAY_OF_WEEK, day);
         return calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT_FORMAT, Locale.getDefault()) + calendar.get(Calendar.DAY_OF_MONTH);
     }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        int day = calendar.getFirstDayOfWeek() + columnIndex;
+        calendar.set(Calendar.DAY_OF_WEEK, day);
+        int index = Integer.parseInt(sdf.format(calendar.getTime()) + rowIndex);
+
+        String result = "";
+        if (recipes.get(index) != null) {
+            result = recipes.get(index).getName();
+        }
+        return result;
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        if (aValue instanceof Recipe) {
+            int day = calendar.getFirstDayOfWeek() + columnIndex;
+            calendar.set(Calendar.DAY_OF_WEEK, day);
+            int index = Integer.parseInt(sdf.format(calendar.getTime()) + rowIndex);
+
+            recipes.put(index, (Recipe) aValue);
+        }
+    }
+    
+    public void removeValueAt(int rowIndex, int columnIndex){
+        int day = calendar.getFirstDayOfWeek() + columnIndex;
+        calendar.set(Calendar.DAY_OF_WEEK, day);
+        int index = Integer.parseInt(sdf.format(calendar.getTime()) + rowIndex);
+        recipes.remove(index);
+        fireTableCellUpdated(rowIndex, columnIndex);
+    }
+
 }

@@ -61,5 +61,5 @@ public class Recipe implements Serializable {
     public void setIngrediants(ArrayList<Ingrediant> ingrediants) {
         this.ingrediants = ingrediants;
     }
-    
+
 }

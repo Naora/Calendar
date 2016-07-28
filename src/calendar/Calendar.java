@@ -42,7 +42,6 @@ public class Calendar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        calendarView1 = new calendar.naora.calendar.CalendarView();
         calendarView = new CalendarView(calendarModel);
         recipeView = new RecipeView(recipeModel);
 
@@ -103,7 +102,6 @@ public class Calendar extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private calendar.naora.calendar.CalendarView calendarView;
-    private calendar.naora.calendar.CalendarView calendarView1;
     private calendar.naora.recipe.RecipeView recipeView;
     // End of variables declaration//GEN-END:variables
 }

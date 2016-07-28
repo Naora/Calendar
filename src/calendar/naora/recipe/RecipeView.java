@@ -5,6 +5,7 @@
  */
 package calendar.naora.recipe;
 
+import calendar.naora.dnd.RecipeTransferHandler;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JLabel;
@@ -117,7 +118,9 @@ public class RecipeView extends javax.swing.JPanel {
     public RecipeView(RecipeModel r) {
         recipeModel = r;
         initComponents();
-    }
+        
+        recipes.setTransferHandler(new RecipeTransferHandler());
+   }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -142,6 +145,7 @@ public class RecipeView extends javax.swing.JPanel {
         recipes.setModel(recipeModel);
         recipes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         recipes.setCellRenderer(new RecipeCellRenderer());
+        recipes.setDragEnabled(true);
         recipes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 recipesMouseClicked(evt);

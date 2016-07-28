@@ -25,7 +25,7 @@ public class RecipeDialog extends javax.swing.JDialog {
     private TagsModel tagsModel;
     private IngrediantsModel ingrediantsModel;
 
-    
+    // <editor-fold defaultstate="collapsed" desc="SpinnerCellEditor">
     private class SpinnerCellEditor extends AbstractCellEditor implements TableCellEditor {
         
         private final JSpinner component;
@@ -45,7 +45,7 @@ public class RecipeDialog extends javax.swing.JDialog {
             return component;
         }
         
-    }
+    }// </editor-fold>
     
     /**
      * Creates new form RecipeDialog
