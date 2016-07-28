@@ -87,6 +87,7 @@ public class Calendar extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Calendrier de recette - Aurore");
 
         jMenu1.setText("Fichier");
 
@@ -173,7 +174,9 @@ public class Calendar extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new Calendar().setVisible(true);
+            Calendar c = new Calendar();
+            c.setLocationRelativeTo(null);
+            c.setVisible(true);
         });
     }
 

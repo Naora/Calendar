@@ -5,7 +5,6 @@
  */
 package calendar.naora.dnd;
 
-import calendar.Calendar;
 import calendar.naora.calendar.CalendarModel;
 import calendar.naora.recipe.Recipe;
 import java.awt.Component;

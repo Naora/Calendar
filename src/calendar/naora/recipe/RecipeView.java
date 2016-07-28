@@ -248,6 +248,7 @@ public class RecipeView extends javax.swing.JPanel {
     private void recipesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipesMouseClicked
         if(evt.getClickCount() == 2) {
             RecipeDialog dialog = new RecipeDialog(null, true, recipes.getSelectedValue());
+            dialog.setLocationRelativeTo(this);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_recipesMouseClicked
