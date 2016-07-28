@@ -5,12 +5,16 @@
  */
 package calendar.naora.recipe;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Nao
  */
-public class Ingrediant {
+public class Ingrediant implements Serializable{
 
+    private static final long serialVersionUID = 1L;
+    
     public enum Type {
         MG("Milligramme"),
         G("Gramme"),

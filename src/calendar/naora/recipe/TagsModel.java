@@ -5,6 +5,7 @@
  */
 package calendar.naora.recipe;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
@@ -12,7 +13,9 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Nao
  */
-public class TagsModel extends AbstractTableModel {
+public class TagsModel extends AbstractTableModel implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
 
     private ArrayList<String> tags;
 

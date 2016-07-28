@@ -6,12 +6,24 @@
 package calendar.naora.recipe;
 
 import java.awt.Component;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
+import java.text.Format;
+import java.text.ParseException;
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
+import javax.swing.InputVerifier;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
@@ -31,7 +43,18 @@ public class RecipeDialog extends javax.swing.JDialog {
         private final JSpinner component;
 
         public SpinnerCellEditor() {
-            component = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 999.9, 0.5));
+            component = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 999.9, 0.1));
+            component.addInputMethodListener(new InputMethodListener() {
+                @Override
+                public void inputMethodTextChanged(InputMethodEvent event) {
+                    
+                }
+
+                @Override
+                public void caretPositionChanged(InputMethodEvent event) {
+                    
+                }
+            });
         }
 
         @Override
@@ -69,8 +92,8 @@ public class RecipeDialog extends javax.swing.JDialog {
     private void initCell() {
         TableColumn quantityColumn = ingrediants.getColumnModel().getColumn(1);
         TableColumn typeColumn = ingrediants.getColumnModel().getColumn(2);
-
-        quantityColumn.setCellEditor(new SpinnerCellEditor());
+        
+        quantityColumn.setCellEditor(new DefaultCellEditor(new JTextField()));
 
         JComboBox<Ingrediant.Type> combo = new JComboBox<>();
         for (Ingrediant.Type value : Ingrediant.Type.values()) {
@@ -147,6 +170,7 @@ public class RecipeDialog extends javax.swing.JDialog {
 
         ingrediants.setModel(ingrediantsModel);
         ingrediants.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        ingrediants.setShowHorizontalLines(false);
         jScrollPane6.setViewportView(ingrediants);
 
         addTag.setText("+");

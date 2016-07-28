@@ -17,6 +17,8 @@ import javax.swing.AbstractListModel;
  */
 public class RecipeModel extends AbstractListModel<Recipe> implements Serializable {
     
+    private static final long serialVersionUID = 1L;
+    
     private ArrayList<Recipe> recipes;
     private String filter;
     private int searchType;
@@ -31,19 +33,6 @@ public class RecipeModel extends AbstractListModel<Recipe> implements Serializab
         filteredRecipes = new ArrayList<>();
         filter = "";
         regex = Pattern.compile(filter);
-        
-        //debug
-        
-        Recipe e = new Recipe();
-        e.setName("test1");
-        recipes.add(e);
-        Recipe a = new Recipe();
-        a.setName("test2");
-        recipes.add(a);
-        Recipe b = new Recipe();
-        b.setName("test3");
-        b.getTags().add("test");
-        recipes.add(b);
     }
 
     public void setFilter(String filter, int searchType) {

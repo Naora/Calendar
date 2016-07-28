@@ -14,6 +14,8 @@ import java.util.ArrayList;
  */
 public class Recipe implements Serializable {
     
+    private static final long serialVersionUID = 1L;
+    
     private String description;
     private String name;
     private ArrayList<Ingrediant> ingrediants;
@@ -61,5 +63,5 @@ public class Recipe implements Serializable {
     public void setIngrediants(ArrayList<Ingrediant> ingrediants) {
         this.ingrediants = ingrediants;
     }
-
+    
 }

@@ -5,6 +5,7 @@
  */
 package calendar.naora.dnd;
 
+import calendar.Calendar;
 import calendar.naora.calendar.CalendarModel;
 import calendar.naora.recipe.Recipe;
 import java.awt.Component;
@@ -12,8 +13,6 @@ import java.awt.Point;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -86,9 +85,9 @@ public class RecipeTransferHandler extends TransferHandler {
 
                 }
             } catch (UnsupportedFlavorException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(RecipeTransferHandler.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(RecipeTransferHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

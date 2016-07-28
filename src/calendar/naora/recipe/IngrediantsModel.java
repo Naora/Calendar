@@ -5,6 +5,7 @@
  */
 package calendar.naora.recipe;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
@@ -12,7 +13,9 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Nao
  */
-public class IngrediantsModel extends AbstractTableModel {
+public class IngrediantsModel extends AbstractTableModel implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     private ArrayList<Ingrediant> ingrediants;
     private final String [] headers = {"Ingrediant","Quantité","Type"};
@@ -77,7 +80,11 @@ public class IngrediantsModel extends AbstractTableModel {
                 ingrediants.get(rowIndex).setName(aValue.toString());
                 break;
             case 1: 
-                ingrediants.get(rowIndex).setQuantity((double)aValue);
+                try {
+                    ingrediants.get(rowIndex).setQuantity(Double.valueOf((String)aValue));
+                } catch (NumberFormatException ex) {
+                    
+                }
                 break;
             case 2: 
                 ingrediants.get(rowIndex).setType((Ingrediant.Type)aValue);

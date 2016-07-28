@@ -9,6 +9,15 @@ import calendar.naora.calendar.CalendarModel;
 import calendar.naora.calendar.CalendarView;
 import calendar.naora.recipe.RecipeModel;
 import calendar.naora.recipe.RecipeView;
+import java.awt.event.WindowEvent;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.UIManager;
 
 /**
@@ -16,7 +25,7 @@ import javax.swing.UIManager;
  * @author Nao
  */
 public class Calendar extends javax.swing.JFrame {
-    
+
     private CalendarModel calendarModel;
     private RecipeModel recipeModel;
 
@@ -24,15 +33,41 @@ public class Calendar extends javax.swing.JFrame {
      * Creates new form Calendar
      */
     public Calendar() {
-        init();
+        load();
         initComponents();
     }
 
-    private void init(){
-        calendarModel = new CalendarModel();
-        recipeModel = new RecipeModel();
+    private void save() {
+        try {
+            FileOutputStream fileCalendar = new FileOutputStream("calendar.ser");
+            try (ObjectOutputStream out = new ObjectOutputStream(fileCalendar)) {
+                out.writeObject(calendarModel);
+                out.writeObject(recipeModel);
+            } catch (IOException ex) {
+                Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
+
+    private void load() {
+        try {
+            FileInputStream fileCalendar = new FileInputStream("calendar.ser");
+            try (ObjectInputStream in = new ObjectInputStream(fileCalendar)) {
+                calendarModel = (CalendarModel) in.readObject();
+                recipeModel = (RecipeModel) in.readObject();
+            } catch (IOException ex) {
+                Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (FileNotFoundException ex) {
+            calendarModel = new CalendarModel();
+            recipeModel = new RecipeModel();
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,8 +79,42 @@ public class Calendar extends javax.swing.JFrame {
 
         calendarView = new CalendarView(calendarModel);
         recipeView = new RecipeView(recipeModel);
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        save = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        quit = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jMenu1.setText("Fichier");
+
+        save.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        save.setText("Enregistrer");
+        save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveActionPerformed(evt);
+            }
+        });
+        jMenu1.add(save);
+        jMenu1.add(jSeparator1);
+
+        quit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        quit.setText("Quitter");
+        quit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quitActionPerformed(evt);
+            }
+        });
+        jMenu1.add(quit);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -58,12 +127,20 @@ public class Calendar extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(recipeView, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+            .addComponent(recipeView, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
             .addComponent(calendarView, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+        save();
+    }//GEN-LAST:event_saveActionPerformed
+
+    private void quitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitActionPerformed
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }//GEN-LAST:event_quitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -82,7 +159,7 @@ public class Calendar extends javax.swing.JFrame {
                 }
             }*/
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            
+
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(Calendar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -102,6 +179,12 @@ public class Calendar extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private calendar.naora.calendar.CalendarView calendarView;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JMenuItem quit;
     private calendar.naora.recipe.RecipeView recipeView;
+    private javax.swing.JMenuItem save;
     // End of variables declaration//GEN-END:variables
 }

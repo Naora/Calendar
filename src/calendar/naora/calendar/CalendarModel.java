@@ -18,6 +18,8 @@ import javax.swing.table.AbstractTableModel;
  * @author Nao
  */
 public class CalendarModel extends AbstractTableModel implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
 
     private Calendar calendar;
     private HashMap<Integer, Recipe> recipes;
