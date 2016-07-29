@@ -18,7 +18,7 @@ public class IngrediantsModel extends AbstractTableModel implements Serializable
     private static final long serialVersionUID = 1L;
     
     private ArrayList<Ingrediant> ingrediants;
-    private final String [] headers = {"Ingrediant","Quantité","Type"};
+    private final String [] headers = {"Ingrédient","Quantité","Type"};
     
     public IngrediantsModel(){
         this(new ArrayList<>());

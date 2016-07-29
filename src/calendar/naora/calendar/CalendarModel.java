@@ -23,7 +23,8 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
 
     private Calendar calendar;
     private HashMap<Integer, Recipe> recipes;
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyMMdd");
+    private final SimpleDateFormat sdf = new SimpleDateFormat("yyyMMdd");
+    private int mealPerDay;
 
     public CalendarModel() {
         this(Calendar.getInstance());
@@ -31,6 +32,7 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
 
     public CalendarModel(Calendar c) {
         calendar = c;
+        mealPerDay = 2;
         recipes = new HashMap<>();
     }
 
@@ -59,7 +61,7 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
 
     @Override
     public int getRowCount() {
-        return 2;
+        return mealPerDay;
     }
 
     @Override
@@ -106,4 +108,18 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
         fireTableCellUpdated(rowIndex, columnIndex);
     }
 
+    public void setMealPerDay(int mealPerDay) {
+        this.mealPerDay = mealPerDay;
+        fireTableDataChanged();
+    }
+
+    public int getMealPerDay() {
+        return mealPerDay;
+    }
+
+    @SuppressWarnings("empty-statement")
+    public void delete(Recipe deletedRecipe) {
+        while(recipes.values().remove(deletedRecipe));
+        fireTableDataChanged();
+    }
 }

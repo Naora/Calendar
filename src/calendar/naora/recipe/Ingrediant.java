@@ -20,7 +20,12 @@ public class Ingrediant implements Serializable{
         G("Gramme"),
         KG("Kilogramme"),
         L("Litre"),
-        ML("Millilitre");
+        CL("Centilitre"),
+        ML("Millilitre"),
+        U("Unité"),
+        Boite("Boite"),
+        CaS("Cuillère a Soupe"),
+        CaC("Cuillère a Café");
         
         private String name = "";
 

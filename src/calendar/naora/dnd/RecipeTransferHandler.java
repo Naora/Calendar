@@ -83,9 +83,7 @@ public class RecipeTransferHandler extends TransferHandler {
                     }
 
                 }
-            } catch (UnsupportedFlavorException ex) {
-                Logger.getLogger(RecipeTransferHandler.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
+            } catch (UnsupportedFlavorException | IOException ex) {
                 Logger.getLogger(RecipeTransferHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

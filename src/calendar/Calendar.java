@@ -7,6 +7,7 @@ package calendar;
 
 import calendar.naora.calendar.CalendarModel;
 import calendar.naora.calendar.CalendarView;
+import calendar.naora.recipe.Recipe;
 import calendar.naora.recipe.RecipeModel;
 import calendar.naora.recipe.RecipeView;
 import java.awt.event.WindowEvent;
@@ -18,7 +19,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
 /**
  *
@@ -29,12 +35,33 @@ public class Calendar extends javax.swing.JFrame {
     private CalendarModel calendarModel;
     private RecipeModel recipeModel;
 
+    private class CalendarListDataListener implements ListDataListener {
+
+        @Override
+        public void intervalAdded(ListDataEvent e) {}
+
+        @Override
+        public void intervalRemoved(ListDataEvent e) {
+            if(e.getSource() instanceof RecipeModel){
+                RecipeModel model = (RecipeModel)e.getSource();
+                Recipe deletedRecipe = model.getDeletedRecipe();
+                calendarModel.delete(deletedRecipe);
+            }
+        }
+
+        @Override
+        public void contentsChanged(ListDataEvent e) {}
+        
+    }
+    
     /**
      * Creates new form Calendar
      */
     public Calendar() {
         load();
         initComponents();
+        
+        recipeModel.addListDataListener(new CalendarListDataListener());
     }
 
     private void save() {
@@ -57,9 +84,7 @@ public class Calendar extends javax.swing.JFrame {
             try (ObjectInputStream in = new ObjectInputStream(fileCalendar)) {
                 calendarModel = (CalendarModel) in.readObject();
                 recipeModel = (RecipeModel) in.readObject();
-            } catch (IOException ex) {
-                Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
+            } catch (IOException | ClassNotFoundException ex) {
                 Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (FileNotFoundException ex) {
@@ -85,6 +110,7 @@ public class Calendar extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         quit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Calendrier de recette - Aurore");
@@ -112,7 +138,16 @@ public class Calendar extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Edition");
+
+        jMenuItem1.setText("Nombre de Repas");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem1);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -142,6 +177,15 @@ public class Calendar extends javax.swing.JFrame {
     private void quitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitActionPerformed
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_quitActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        SpinnerNumberModel model = new SpinnerNumberModel(calendarModel.getMealPerDay(), 0, 10, 1);
+        JSpinner spinner = new JSpinner(model);
+        int option = JOptionPane.showOptionDialog(this, spinner, "Nombre de repas par jour", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (option == JOptionPane.OK_OPTION ) {
+            calendarModel.setMealPerDay((int)spinner.getValue());
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -185,6 +229,7 @@ public class Calendar extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuItem quit;
     private calendar.naora.recipe.RecipeView recipeView;
