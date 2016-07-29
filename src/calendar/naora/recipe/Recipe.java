@@ -77,10 +77,7 @@ public class Recipe implements Serializable {
             return false;
         }
         final Recipe other = (Recipe) obj;
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.name, other.name);
     }
 
     @Override
