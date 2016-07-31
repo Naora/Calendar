@@ -5,10 +5,13 @@
  */
 package calendar.naora.calendar;
 
+import calendar.naora.recipe.Ingrediant;
 import calendar.naora.recipe.Recipe;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import javax.swing.table.AbstractTableModel;
@@ -121,5 +124,53 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
     public void delete(Recipe deletedRecipe) {
         while(recipes.values().remove(deletedRecipe));
         fireTableDataChanged();
+    }
+    
+    public void update(Recipe recipeUpdated) {
+        if(recipes.containsValue(recipeUpdated)){
+            //to do : maj les valeurs dans le calendrier.
+        }
+    }
+    
+    public String export(Date begin, Date end){
+        calendar.setTime(begin);
+        String result="";
+        ArrayList<Recipe> recipesTmp = new ArrayList<>();
+        
+        while(calendar.getTime().before(end) || calendar.getTime().equals(end)){
+            for(int i=0; i < mealPerDay; i++){
+                int index = Integer.parseInt(sdf.format(calendar.getTime()) + i);
+                Recipe tmp = recipes.get(index);
+                if(tmp != null)
+                    recipesTmp.add(tmp);
+            }
+            calendar.add(Calendar.DATE, 1);
+        }
+        
+        ArrayList<Ingrediant> ingrediantsTmp = new ArrayList<>();
+        
+        for( Recipe r : recipesTmp){
+            for(Ingrediant i : r.getIngrediants()){
+                if(ingrediantsTmp.contains(i)){
+                    
+                    int index = ingrediantsTmp.indexOf(i);
+                    double quantity = ingrediantsTmp.get(index).getQuantity();
+                    quantity += i.getQuantity();
+                    ingrediantsTmp.get(index).setQuantity(quantity);
+                } else {
+                    ingrediantsTmp.add(i);
+                }
+            }
+        }
+        String newline = System.getProperty("line.separator");
+        String list = "";
+        for(Ingrediant i : ingrediantsTmp){
+            list += i.getName() + " " 
+                    + String.valueOf(i.getQuantity()) 
+                    + " " + i.getType().name() 
+                    + newline;
+        }
+        
+        return list;
     }
 }

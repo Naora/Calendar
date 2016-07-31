@@ -250,6 +250,7 @@ public class RecipeView extends javax.swing.JPanel {
             RecipeDialog dialog = new RecipeDialog(null, true, recipes.getSelectedValue());
             dialog.setLocationRelativeTo(this);
             dialog.setVisible(true);
+            recipeModel.recipeUpdated(recipes.getSelectedIndex());
         }
     }//GEN-LAST:event_recipesMouseClicked
 

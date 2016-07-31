@@ -27,6 +27,7 @@ public class RecipeModel extends AbstractListModel<Recipe> implements Serializab
     
     //last delete element
     private Recipe recipeDeleted;
+    private Recipe recipeUpdated;
     
     public static final int SEARCH_NAME = 0;
     public static final int SEARCH_TAG = 1;
@@ -84,11 +85,12 @@ public class RecipeModel extends AbstractListModel<Recipe> implements Serializab
         }
     }
     
-    public void delete(int i){
-        recipeDeleted = recipes.remove(i);
+    public void delete(int index){
+        recipeDeleted = filter.isEmpty() ? recipes.get(index) : filteredRecipes.get(index);
+        recipes.remove(recipeDeleted);
         updateFilter();
         if(recipeDeleted != null)
-            fireIntervalRemoved(this, 0, 0);
+            fireIntervalRemoved(this, index, index);
     }
 
     @Override
@@ -99,6 +101,15 @@ public class RecipeModel extends AbstractListModel<Recipe> implements Serializab
     @Override
     public Recipe getElementAt(int index) {
         return filter.isEmpty() ? recipes.get(index) : filteredRecipes.get(index);
+    }
+    
+    public void recipeUpdated(int index){
+        recipeUpdated = filter.isEmpty() ? recipes.get(index) : filteredRecipes.get(index);
+        fireContentsChanged(this, index, index);
+    }
+    
+    public Recipe getUpdatedRecipe(){
+        return recipeUpdated;
     }
     
     public Recipe getDeletedRecipe(){

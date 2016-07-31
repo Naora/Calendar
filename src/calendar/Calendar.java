@@ -7,6 +7,7 @@ package calendar;
 
 import calendar.naora.calendar.CalendarModel;
 import calendar.naora.calendar.CalendarView;
+import calendar.naora.export.ExportDialog;
 import calendar.naora.recipe.Recipe;
 import calendar.naora.recipe.RecipeModel;
 import calendar.naora.recipe.RecipeView;
@@ -50,7 +51,13 @@ public class Calendar extends javax.swing.JFrame {
         }
 
         @Override
-        public void contentsChanged(ListDataEvent e) {}
+        public void contentsChanged(ListDataEvent e) {
+            if(e.getSource() instanceof RecipeModel){
+                RecipeModel model = (RecipeModel)e.getSource();
+                Recipe recipeUpdated = model.getUpdatedRecipe();
+                calendarModel.update(recipeUpdated);
+            }
+        }
         
     }
     
@@ -108,9 +115,10 @@ public class Calendar extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         save = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        export = new javax.swing.JMenuItem();
         quit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        mealPerDay = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Calendrier de recette - Aurore");
@@ -127,6 +135,15 @@ public class Calendar extends javax.swing.JFrame {
         jMenu1.add(save);
         jMenu1.add(jSeparator1);
 
+        export.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        export.setText("Exporter");
+        export.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportActionPerformed(evt);
+            }
+        });
+        jMenu1.add(export);
+
         quit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         quit.setText("Quitter");
         quit.addActionListener(new java.awt.event.ActionListener() {
@@ -140,13 +157,13 @@ public class Calendar extends javax.swing.JFrame {
 
         jMenu2.setText("Edition");
 
-        jMenuItem1.setText("Nombre de Repas");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        mealPerDay.setText("Nombre de Repas");
+        mealPerDay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                mealPerDayActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem1);
+        jMenu2.add(mealPerDay);
 
         jMenuBar1.add(jMenu2);
 
@@ -178,14 +195,20 @@ public class Calendar extends javax.swing.JFrame {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_quitActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void mealPerDayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mealPerDayActionPerformed
         SpinnerNumberModel model = new SpinnerNumberModel(calendarModel.getMealPerDay(), 0, 10, 1);
         JSpinner spinner = new JSpinner(model);
         int option = JOptionPane.showOptionDialog(this, spinner, "Nombre de repas par jour", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
         if (option == JOptionPane.OK_OPTION ) {
             calendarModel.setMealPerDay((int)spinner.getValue());
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_mealPerDayActionPerformed
+
+    private void exportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportActionPerformed
+        ExportDialog dialog = new ExportDialog(this, true, calendarModel);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_exportActionPerformed
 
     /**
      * @param args the command line arguments
@@ -226,11 +249,12 @@ public class Calendar extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private calendar.naora.calendar.CalendarView calendarView;
+    private javax.swing.JMenuItem export;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JMenuItem mealPerDay;
     private javax.swing.JMenuItem quit;
     private calendar.naora.recipe.RecipeView recipeView;
     private javax.swing.JMenuItem save;
