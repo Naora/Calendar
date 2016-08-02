@@ -18,7 +18,7 @@ import java.io.IOException;
 public class RecipeTransferable implements Transferable {
 
     public static final DataFlavor RECIPE_FLAVOR = new DataFlavor(Recipe.class, "java/Recipe");
-    private Recipe recipe;
+    private final Recipe recipe;
     
     public RecipeTransferable(Recipe recipe){
         this.recipe = recipe;

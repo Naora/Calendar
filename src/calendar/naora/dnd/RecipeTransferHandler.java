@@ -46,7 +46,7 @@ public class RecipeTransferHandler extends TransferHandler {
 
     @Override
     public int getSourceActions(JComponent c) {
-        return DnDConstants.ACTION_COPY;
+        return DnDConstants.ACTION_REFERENCE;
     }
 
     @Override
@@ -78,10 +78,9 @@ public class RecipeTransferHandler extends TransferHandler {
                     int col = calendarTable.columnAtPoint(point);
 
                     if (row != -1 && col != -1) {
-                        calendarModel.setValueAt(value, row, col);
+                        calendarModel.setValueAt((Recipe)value, row, col);
                         result = true;
                     }
-
                 }
             } catch (UnsupportedFlavorException | IOException ex) {
                 Logger.getLogger(RecipeTransferHandler.class.getName()).log(Level.SEVERE, null, ex);

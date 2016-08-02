@@ -47,6 +47,12 @@ public class Ingrediant implements Serializable{
     public Ingrediant() {
         this("Ingredient", 0.0f, Type.G);
     }
+    
+    public Ingrediant(Ingrediant other){
+        this.name = other.name;
+        this.quantity = other.quantity;
+        this.type = other.type;
+    }
 
     public Ingrediant(String name, double quantity, Type type) {
         this.name = name;

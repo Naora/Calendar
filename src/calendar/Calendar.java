@@ -12,6 +12,7 @@ import calendar.naora.recipe.Recipe;
 import calendar.naora.recipe.RecipeModel;
 import calendar.naora.recipe.RecipeView;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -36,15 +37,17 @@ public class Calendar extends javax.swing.JFrame {
     private CalendarModel calendarModel;
     private RecipeModel recipeModel;
 
+    
     private class CalendarListDataListener implements ListDataListener {
 
         @Override
-        public void intervalAdded(ListDataEvent e) {}
+        public void intervalAdded(ListDataEvent e) {
+        }
 
         @Override
         public void intervalRemoved(ListDataEvent e) {
-            if(e.getSource() instanceof RecipeModel){
-                RecipeModel model = (RecipeModel)e.getSource();
+            if (e.getSource() instanceof RecipeModel) {
+                RecipeModel model = (RecipeModel) e.getSource();
                 Recipe deletedRecipe = model.getDeletedRecipe();
                 calendarModel.delete(deletedRecipe);
             }
@@ -52,30 +55,61 @@ public class Calendar extends javax.swing.JFrame {
 
         @Override
         public void contentsChanged(ListDataEvent e) {
-            if(e.getSource() instanceof RecipeModel){
-                RecipeModel model = (RecipeModel)e.getSource();
+            if (e.getSource() instanceof RecipeModel) {
+                RecipeModel model = (RecipeModel) e.getSource();
                 Recipe recipeUpdated = model.getUpdatedRecipe();
                 calendarModel.update(recipeUpdated);
             }
         }
-        
+
     }
     
+    private class CalendarWindowsListener implements WindowListener {
+
+        @Override
+        public void windowOpened(WindowEvent e) {}
+
+        @Override
+        public void windowClosing(WindowEvent e) { save(); }
+
+        @Override
+        public void windowClosed(WindowEvent e) {}
+
+        @Override
+        public void windowIconified(WindowEvent e) {}
+
+        @Override
+        public void windowDeiconified(WindowEvent e) {}
+
+        @Override
+        public void windowActivated(WindowEvent e) {}
+
+        @Override
+        public void windowDeactivated(WindowEvent e) {}
+        
+    }
+
     /**
      * Creates new form Calendar
      */
     public Calendar() {
         load();
         initComponents();
-        
+
         recipeModel.addListDataListener(new CalendarListDataListener());
+        addWindowListener(new CalendarWindowsListener());
     }
 
     private void save() {
         try {
             FileOutputStream fileCalendar = new FileOutputStream("calendar.ser");
+            FileOutputStream fileRecipe = new FileOutputStream("recipe.ser");
             try (ObjectOutputStream out = new ObjectOutputStream(fileCalendar)) {
                 out.writeObject(calendarModel);
+            } catch (IOException ex) {
+                Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try (ObjectOutputStream out = new ObjectOutputStream(fileRecipe)) {
                 out.writeObject(recipeModel);
             } catch (IOException ex) {
                 Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
@@ -90,12 +124,20 @@ public class Calendar extends javax.swing.JFrame {
             FileInputStream fileCalendar = new FileInputStream("calendar.ser");
             try (ObjectInputStream in = new ObjectInputStream(fileCalendar)) {
                 calendarModel = (CalendarModel) in.readObject();
-                recipeModel = (RecipeModel) in.readObject();
             } catch (IOException | ClassNotFoundException ex) {
                 Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (FileNotFoundException ex) {
             calendarModel = new CalendarModel();
+        }
+        try {
+            FileInputStream fileRecipe = new FileInputStream("recipe.ser");
+            try (ObjectInputStream in = new ObjectInputStream(fileRecipe)) {
+                recipeModel = (RecipeModel) in.readObject();
+            } catch (IOException | ClassNotFoundException ex) {
+                Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (FileNotFoundException ex) {
             recipeModel = new RecipeModel();
         }
     }
@@ -199,8 +241,8 @@ public class Calendar extends javax.swing.JFrame {
         SpinnerNumberModel model = new SpinnerNumberModel(calendarModel.getMealPerDay(), 0, 10, 1);
         JSpinner spinner = new JSpinner(model);
         int option = JOptionPane.showOptionDialog(this, spinner, "Nombre de repas par jour", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-        if (option == JOptionPane.OK_OPTION ) {
-            calendarModel.setMealPerDay((int)spinner.getValue());
+        if (option == JOptionPane.OK_OPTION) {
+            calendarModel.setMealPerDay((int) spinner.getValue());
         }
     }//GEN-LAST:event_mealPerDayActionPerformed
 
@@ -229,13 +271,20 @@ public class Calendar extends javax.swing.JFrame {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Calendar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Calendar.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Calendar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Calendar.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Calendar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Calendar.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Calendar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Calendar.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 

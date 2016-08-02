@@ -86,4 +86,11 @@ public class Recipe implements Serializable {
         hash = 47 * hash + Objects.hashCode(this.name);
         return hash;
     }
+    
+    public void copy(Recipe other){
+        this.description = other.description;
+        this.ingrediants = other.ingrediants;
+        this.name = other.name;
+        this.tags = other.tags;
+    }
 }

@@ -128,23 +128,27 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
     
     public void update(Recipe recipeUpdated) {
         if(recipes.containsValue(recipeUpdated)){
-            //to do : maj les valeurs dans le calendrier.
+            for(Recipe r : recipes.values()) {
+                if(r.equals(recipeUpdated))
+                    r.copy(recipeUpdated);
+            }
         }
     }
     
     public String export(Date begin, Date end){
-        calendar.setTime(begin);
-        String result="";
+        
+        Calendar c = Calendar.getInstance();
+        c.setTime(begin);
         ArrayList<Recipe> recipesTmp = new ArrayList<>();
         
-        while(calendar.getTime().before(end) || calendar.getTime().equals(end)){
+        while(c.getTime().before(end) || c.getTime().equals(end)){
             for(int i=0; i < mealPerDay; i++){
-                int index = Integer.parseInt(sdf.format(calendar.getTime()) + i);
+                int index = Integer.parseInt(sdf.format(c.getTime()) + i);
                 Recipe tmp = recipes.get(index);
                 if(tmp != null)
                     recipesTmp.add(tmp);
             }
-            calendar.add(Calendar.DATE, 1);
+            c.add(Calendar.DATE, 1);
         }
         
         ArrayList<Ingrediant> ingrediantsTmp = new ArrayList<>();
@@ -158,7 +162,8 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
                     quantity += i.getQuantity();
                     ingrediantsTmp.get(index).setQuantity(quantity);
                 } else {
-                    ingrediantsTmp.add(i);
+                    Ingrediant clone = new Ingrediant(i);
+                    ingrediantsTmp.add(clone);
                 }
             }
         }
@@ -170,7 +175,6 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
                     + " " + i.getType().name() 
                     + newline;
         }
-        
         return list;
     }
 }
