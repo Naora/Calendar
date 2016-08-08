@@ -26,7 +26,8 @@ public class Ingrediant implements Serializable{
         U("Unité"),
         Boite("Boite"),
         CaS("Cuillère a Soupe"),
-        CaC("Cuillère a Café");
+        CaC("Cuillère a Café"),
+        Tranche("Tranche");
         
         private String name = "";
 

@@ -6,6 +6,10 @@
 package calendar.naora.recipe;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.InputMethodEvent;
 import java.awt.event.InputMethodListener;
 import javax.swing.AbstractCellEditor;
@@ -81,9 +85,26 @@ public class RecipeDialog extends javax.swing.JDialog {
     }
 
     private void initCell() {
+        TableColumn nameColumn = ingrediants.getColumnModel().getColumn(0);
         TableColumn quantityColumn = ingrediants.getColumnModel().getColumn(1);
         TableColumn typeColumn = ingrediants.getColumnModel().getColumn(2);
         
+        JTextField textName = new JTextField();
+        textName.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if(e.getComponent() instanceof JTextField){
+                    JTextField tf = (JTextField) e.getComponent();
+                    if("Ingredient".equals(tf.getText()))
+                        tf.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {}
+        });
+        
+        nameColumn.setCellEditor(new DefaultCellEditor(textName));
         quantityColumn.setCellEditor(new DefaultCellEditor(new JTextField()));
 
         JComboBox<Ingrediant.Type> combo = new JComboBox<>();

@@ -218,7 +218,7 @@ public class RecipeView extends javax.swing.JPanel {
 
     private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
         String name = JOptionPane.showInputDialog(this, "Nom de la recette :", "Ajouter", JOptionPane.QUESTION_MESSAGE);
-        if (!name.isEmpty()) {
+        if (name != null && !name.isEmpty()) {
             Recipe r = new Recipe(name);
             recipeModel.add(r);
         }

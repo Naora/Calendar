@@ -124,6 +124,7 @@ public class Calendar extends javax.swing.JFrame {
             FileInputStream fileCalendar = new FileInputStream("calendar.ser");
             try (ObjectInputStream in = new ObjectInputStream(fileCalendar)) {
                 calendarModel = (CalendarModel) in.readObject();
+                calendarModel.actualWeek();
             } catch (IOException | ClassNotFoundException ex) {
                 Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
             }

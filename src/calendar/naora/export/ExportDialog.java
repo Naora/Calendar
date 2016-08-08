@@ -190,6 +190,8 @@ public class ExportDialog extends javax.swing.JDialog {
 
     private void openFileChooserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileChooserActionPerformed
         JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Fichier a exporter");
+        fc.setCurrentDirectory(null);
         int option = fc.showOpenDialog(this);
         
         if(option == JFileChooser.APPROVE_OPTION){
@@ -203,22 +205,20 @@ public class ExportDialog extends javax.swing.JDialog {
 
     private void exportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportActionPerformed
         try {
-            String export = model.export(sdf.parse(startDate.getText()), sdf.parse(endDate.getText()));
+            String modelExport = model.export(sdf.parse(startDate.getText()), sdf.parse(endDate.getText()));
             if(clipboard.isSelected()){
-                StringSelection ss = new StringSelection(export);
+                StringSelection ss = new StringSelection(modelExport);
                 Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
                 c.setContents(ss, ss);
             }
             if(file.isSelected()){
                 File f = new File(filePath.getText());
                 FileOutputStream out = new FileOutputStream(f);
-                out.write(export.getBytes());
+                out.write(modelExport.getBytes());
                 out.close();
             }
             
-        } catch (ParseException ex) {
-            Logger.getLogger(ExportDialog.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (ParseException | IOException ex) {
             Logger.getLogger(ExportDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
         
