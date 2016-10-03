@@ -91,7 +91,7 @@
           <Group type="102" alignment="1" attributes="0">
               <Component id="recipeView" min="-2" pref="260" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="calendarView" pref="683" max="32767" attributes="0"/>
+              <Component id="calendarView" pref="784" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

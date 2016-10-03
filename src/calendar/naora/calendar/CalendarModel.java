@@ -28,7 +28,8 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
     private HashMap<Integer, Recipe> recipes;
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyMMdd");
     private int mealPerDay;
-
+    private String memo;
+    
     public CalendarModel() {
         this(Calendar.getInstance());
     }
@@ -37,6 +38,7 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
         calendar = c;
         mealPerDay = 2;
         recipes = new HashMap<>();
+        memo = "";
     }
 
     public void nextWeek() {
@@ -177,4 +179,14 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
         }
         return list;
     }
+    
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
 }

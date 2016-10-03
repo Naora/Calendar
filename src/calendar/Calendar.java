@@ -219,7 +219,7 @@ public class Calendar extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(recipeView, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(calendarView, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE))
+                .addComponent(calendarView, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

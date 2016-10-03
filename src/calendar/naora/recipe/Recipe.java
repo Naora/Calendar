@@ -13,7 +13,7 @@ import java.util.Objects;
  *
  * @author Nao
  */
-public class Recipe implements Serializable {
+public class Recipe implements Serializable, Comparable<Recipe> {
     
     private static final long serialVersionUID = 1L;
     
@@ -92,5 +92,10 @@ public class Recipe implements Serializable {
         this.ingrediants = other.ingrediants;
         this.name = other.name;
         this.tags = other.tags;
+    }
+    
+    @Override
+    public int compareTo(Recipe o) {
+        return name.compareToIgnoreCase(o.name);
     }
 }
