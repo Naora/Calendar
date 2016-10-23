@@ -36,8 +36,10 @@ public class RecipeModel extends AbstractListModel<Recipe> implements Serializab
     public static final int SEARCH_NAME = 0;
     public static final int SEARCH_TAG = 1;
     
-    private class RecipeComparator implements Comparator<Recipe>{
-
+    private class RecipeComparator implements Comparator<Recipe>, Serializable{
+        
+        private static final long serialVersionUID = 1L;
+        
         @Override
         public int compare(Recipe o1, Recipe o2) {
             return o1.compareTo(o2);

@@ -34,7 +34,6 @@ public class CalendarView extends javax.swing.JPanel {
     private void updateWindow() {
         month.setText(calendarModel.getMonth());
         year.setText(calendarModel.getYear());
-        memoText.setText(calendarModel.getMemo());
     }
 
     /**
@@ -54,7 +53,7 @@ public class CalendarView extends javax.swing.JPanel {
         month = new javax.swing.JLabel();
         year = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        memoText = new javax.swing.JTextPane();
+        description = new javax.swing.JTextArea();
 
         setMinimumSize(new java.awt.Dimension(650, 200));
 
@@ -63,6 +62,11 @@ public class CalendarView extends javax.swing.JPanel {
         calendar.setRowHeight(30);
         calendar.setRowSelectionAllowed(false);
         calendar.getTableHeader().setReorderingAllowed(false);
+        calendar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                calendarMouseClicked(evt);
+            }
+        });
         calendar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 calendarKeyPressed(evt);
@@ -96,14 +100,10 @@ public class CalendarView extends javax.swing.JPanel {
         year.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         year.setText("Année");
 
-        memoText.setText(calendarModel.getMemo());
-        memoText.setMinimumSize(new java.awt.Dimension(800, 220));
-        memoText.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                memoTextKeyReleased(evt);
-            }
-        });
-        jScrollPane2.setViewportView(memoText);
+        description.setEditable(false);
+        description.setColumns(20);
+        description.setRows(5);
+        jScrollPane2.setViewportView(description);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -176,16 +176,19 @@ public class CalendarView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_calendarKeyPressed
 
-    private void memoTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_memoTextKeyReleased
-        calendarModel.setMemo(memoText.getText());
-    }//GEN-LAST:event_memoTextKeyReleased
+    private void calendarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_calendarMouseClicked
+        int row = calendar.getSelectedRow();
+        int column = calendar.getSelectedColumn();
+        
+        description.setText(calendarModel.getDescription(row, column));
+    }//GEN-LAST:event_calendarMouseClicked
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton actualWeek;
     private javax.swing.JTable calendar;
+    private javax.swing.JTextArea description;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextPane memoText;
     private javax.swing.JLabel month;
     private javax.swing.JButton nextWeek;
     private javax.swing.JButton previousWeek;
