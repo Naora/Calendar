@@ -19,6 +19,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -36,6 +38,7 @@ public class Calendar extends javax.swing.JFrame {
 
     private CalendarModel calendarModel;
     private RecipeModel recipeModel;
+    private Timer autoSave;
 
     
     private class CalendarListDataListener implements ListDataListener {
@@ -70,7 +73,10 @@ public class Calendar extends javax.swing.JFrame {
         public void windowOpened(WindowEvent e) {}
 
         @Override
-        public void windowClosing(WindowEvent e) { save(); }
+        public void windowClosing(WindowEvent e) { 
+            autoSave.cancel(); 
+            save(); 
+        }
 
         @Override
         public void windowClosed(WindowEvent e) {}
@@ -95,9 +101,19 @@ public class Calendar extends javax.swing.JFrame {
     public Calendar() {
         load();
         initComponents();
-
+        postInit();
+    }
+    
+    private void postInit() {
         recipeModel.addListDataListener(new CalendarListDataListener());
         addWindowListener(new CalendarWindowsListener());
+        autoSave = new Timer();
+        autoSave.schedule(new TimerTask(){
+            @Override
+            public void run() {
+                save();
+            }
+        }, 300000, 300000);
     }
 
     private void save() {
@@ -257,35 +273,18 @@ public class Calendar extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+        
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            /*for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }*/
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Calendar.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Calendar.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Calendar.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Calendar.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 

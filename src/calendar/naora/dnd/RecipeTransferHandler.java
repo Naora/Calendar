@@ -33,7 +33,7 @@ public class RecipeTransferHandler extends TransferHandler {
     @Override
     protected Transferable createTransferable(JComponent c) {
         Transferable t = null;
-
+        
         if (c instanceof JList) {
             JList list = (JList) c;
             Object value = list.getSelectedValue();

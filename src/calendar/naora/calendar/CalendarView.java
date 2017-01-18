@@ -61,6 +61,7 @@ public class CalendarView extends javax.swing.JPanel {
         calendar.setDragEnabled(true);
         calendar.setRowHeight(30);
         calendar.setRowSelectionAllowed(false);
+        calendar.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         calendar.getTableHeader().setReorderingAllowed(false);
         calendar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

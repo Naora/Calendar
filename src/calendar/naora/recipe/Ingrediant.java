@@ -66,7 +66,7 @@ public class Ingrediant implements Serializable{
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public double getQuantity() {

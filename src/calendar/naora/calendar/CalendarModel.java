@@ -156,7 +156,6 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
         for( Recipe r : recipesTmp){
             for(Ingrediant i : r.getIngrediants()){
                 if(ingrediantsTmp.contains(i)){
-                    
                     int index = ingrediantsTmp.indexOf(i);
                     double quantity = ingrediantsTmp.get(index).getQuantity();
                     quantity += i.getQuantity();
