@@ -36,8 +36,8 @@ import javax.swing.event.ListDataListener;
  */
 public class Calendar extends javax.swing.JFrame {
 
-    private CalendarModel calendarModel;
-    private RecipeModel recipeModel;
+    private CalendarModel calendarModel = new CalendarModel();
+    private RecipeModel recipeModel = new RecipeModel();
     private Timer autoSave;
 
     
@@ -145,7 +145,7 @@ public class Calendar extends javax.swing.JFrame {
                 Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (FileNotFoundException ex) {
-            calendarModel = new CalendarModel();
+            System.err.println(ex.getMessage());
         }
         try {
             FileInputStream fileRecipe = new FileInputStream("recipe.ser");
@@ -155,7 +155,7 @@ public class Calendar extends javax.swing.JFrame {
                 Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (FileNotFoundException ex) {
-            recipeModel = new RecipeModel();
+            System.err.println(ex.getMessage());
         }
     }
 

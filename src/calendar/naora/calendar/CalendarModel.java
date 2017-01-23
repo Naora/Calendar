@@ -24,19 +24,16 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
     
     private static final long serialVersionUID = 1L;
 
-    private Calendar calendar;
-    private HashMap<Integer, Recipe> recipes;
+    private Calendar calendar = Calendar.getInstance();
+    private HashMap<Integer, Recipe> recipes  = new HashMap<>();
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyMMdd");
-    private int mealPerDay;
+    private int mealPerDay = 2;
     
     public CalendarModel() {
-        this(Calendar.getInstance());
     }
 
     public CalendarModel(Calendar c) {
         calendar = c;
-        mealPerDay = 2;
-        recipes = new HashMap<>();
     }
 
     public void nextWeek() {

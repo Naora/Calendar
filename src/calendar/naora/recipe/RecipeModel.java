@@ -20,18 +20,18 @@ public class RecipeModel extends AbstractListModel<Recipe> implements Serializab
     
     private static final long serialVersionUID = 1L;
     
-    private ArrayList<Recipe> recipes;
-    private String filter;
+    private ArrayList<Recipe> recipes = new ArrayList<>();
+    private String filter = "";
     private int searchType;
-    private ArrayList<Recipe> filteredRecipes;
-    private Pattern regex;
+    private ArrayList<Recipe> filteredRecipes = new ArrayList<>();
+    private Pattern regex = Pattern.compile(filter);
     
     //last delete element
-    private Recipe recipeDeleted;
-    private Recipe recipeUpdated;
+    private Recipe recipeDeleted = null;
+    private Recipe recipeUpdated = null;
     
     //comparator
-    private RecipeComparator comparator;
+    private RecipeComparator comparator = new RecipeComparator();
     
     public static final int SEARCH_NAME = 0;
     public static final int SEARCH_TAG = 1;
@@ -48,12 +48,6 @@ public class RecipeModel extends AbstractListModel<Recipe> implements Serializab
     }
 
     public RecipeModel() {
-        recipes = new ArrayList<>();
-        filteredRecipes = new ArrayList<>();
-        filter = "";
-        regex = Pattern.compile(filter);
-        recipeDeleted = null;
-        comparator = new RecipeComparator();
     }
 
     public void setFilter(String filter, int searchType) {
