@@ -39,6 +39,7 @@ public class Calendar extends javax.swing.JFrame {
     private CalendarModel calendarModel = new CalendarModel();
     private RecipeModel recipeModel = new RecipeModel();
     private Timer autoSave;
+    private String document;
 
     
     private class CalendarListDataListener implements ListDataListener {
@@ -99,6 +100,7 @@ public class Calendar extends javax.swing.JFrame {
      * Creates new form Calendar
      */
     public Calendar() {
+        document = System.getProperty("user.dir") + System.getProperty("file.separator");
         load();
         initComponents();
         postInit();
@@ -118,8 +120,8 @@ public class Calendar extends javax.swing.JFrame {
 
     private void save() {
         try {
-            FileOutputStream fileCalendar = new FileOutputStream("calendar.ser");
-            FileOutputStream fileRecipe = new FileOutputStream("recipe.ser");
+            FileOutputStream fileCalendar = new FileOutputStream(document+"calendar.ser");
+            FileOutputStream fileRecipe = new FileOutputStream(document+"recipe.ser");
             try (ObjectOutputStream out = new ObjectOutputStream(fileCalendar)) {
                 out.writeObject(calendarModel);
             } catch (IOException ex) {
@@ -137,7 +139,7 @@ public class Calendar extends javax.swing.JFrame {
 
     private void load() {
         try {
-            FileInputStream fileCalendar = new FileInputStream("calendar.ser");
+            FileInputStream fileCalendar = new FileInputStream(document+"calendar.ser");
             try (ObjectInputStream in = new ObjectInputStream(fileCalendar)) {
                 calendarModel = (CalendarModel) in.readObject();
                 calendarModel.actualWeek();
@@ -148,7 +150,7 @@ public class Calendar extends javax.swing.JFrame {
             System.err.println(ex.getMessage());
         }
         try {
-            FileInputStream fileRecipe = new FileInputStream("recipe.ser");
+            FileInputStream fileRecipe = new FileInputStream(document+"recipe.ser");
             try (ObjectInputStream in = new ObjectInputStream(fileRecipe)) {
                 recipeModel = (RecipeModel) in.readObject();
             } catch (IOException | ClassNotFoundException ex) {
