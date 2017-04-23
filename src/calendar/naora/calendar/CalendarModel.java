@@ -7,6 +7,8 @@ package calendar.naora.calendar;
 
 import calendar.naora.recipe.Ingrediant;
 import calendar.naora.recipe.Recipe;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,16 +26,23 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
     
     private static final long serialVersionUID = 1L;
 
-    private Calendar calendar = Calendar.getInstance();
+    private Calendar calendar;
     private HashMap<Integer, Recipe> recipes  = new HashMap<>();
-    private final SimpleDateFormat sdf = new SimpleDateFormat("yyyMMdd");
+    private final SimpleDateFormat sdf;
+    private transient ActionListener saveListener;
     private int mealPerDay = 2;
     
     public CalendarModel() {
+        this(Calendar.getInstance());
     }
 
     public CalendarModel(Calendar c) {
         calendar = c;
+        sdf = new SimpleDateFormat("yyyMMdd");
+    }
+    
+    public void addSaveListener(ActionListener l) {
+        saveListener = l;
     }
 
     public void nextWeek() {
@@ -97,6 +106,7 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
             int index = Integer.parseInt(sdf.format(calendar.getTime()) + rowIndex);
 
             recipes.put(index, (Recipe) aValue);
+            saveListener.actionPerformed(null);
         }
     }
     
@@ -106,11 +116,13 @@ public class CalendarModel extends AbstractTableModel implements Serializable {
         int index = Integer.parseInt(sdf.format(calendar.getTime()) + rowIndex);
         recipes.remove(index);
         fireTableCellUpdated(rowIndex, columnIndex);
+        saveListener.actionPerformed(null);
     }
 
     public void setMealPerDay(int mealPerDay) {
         this.mealPerDay = mealPerDay;
         fireTableDataChanged();
+        saveListener.actionPerformed(null);
     }
 
     public int getMealPerDay() {

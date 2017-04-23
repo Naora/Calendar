@@ -11,16 +11,15 @@ import calendar.naora.export.ExportDialog;
 import calendar.naora.recipe.Recipe;
 import calendar.naora.recipe.RecipeModel;
 import calendar.naora.recipe.RecipeView;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -36,11 +35,9 @@ import javax.swing.event.ListDataListener;
  */
 public class Calendar extends javax.swing.JFrame {
 
-    private CalendarModel calendarModel = new CalendarModel();
-    private RecipeModel recipeModel = new RecipeModel();
-    private Timer autoSave;
+    private CalendarModel calendarModel;
+    private RecipeModel recipeModel;
     private String document;
-
     
     private class CalendarListDataListener implements ListDataListener {
 
@@ -68,32 +65,12 @@ public class Calendar extends javax.swing.JFrame {
 
     }
     
-    private class CalendarWindowsListener implements WindowListener {
+    private class CalendarSaveActionListener implements ActionListener {
 
         @Override
-        public void windowOpened(WindowEvent e) {}
-
-        @Override
-        public void windowClosing(WindowEvent e) { 
-            autoSave.cancel(); 
-            save(); 
+        public void actionPerformed(ActionEvent e) {
+            save();
         }
-
-        @Override
-        public void windowClosed(WindowEvent e) {}
-
-        @Override
-        public void windowIconified(WindowEvent e) {}
-
-        @Override
-        public void windowDeiconified(WindowEvent e) {}
-
-        @Override
-        public void windowActivated(WindowEvent e) {}
-
-        @Override
-        public void windowDeactivated(WindowEvent e) {}
-        
     }
 
     /**
@@ -101,6 +78,8 @@ public class Calendar extends javax.swing.JFrame {
      */
     public Calendar() {
         document = System.getProperty("user.dir") + System.getProperty("file.separator");
+        calendarModel = new CalendarModel();
+        recipeModel = new RecipeModel();
         load();
         initComponents();
         postInit();
@@ -108,14 +87,8 @@ public class Calendar extends javax.swing.JFrame {
     
     private void postInit() {
         recipeModel.addListDataListener(new CalendarListDataListener());
-        addWindowListener(new CalendarWindowsListener());
-        autoSave = new Timer();
-        autoSave.schedule(new TimerTask(){
-            @Override
-            public void run() {
-                save();
-            }
-        }, 300000, 300000);
+        recipeModel.addSaveListener(new CalendarSaveActionListener());
+        calendarModel.addSaveListener(new CalendarSaveActionListener());
     }
 
     private void save() {
@@ -183,6 +156,8 @@ public class Calendar extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Calendrier de recette - Aurore");
+        setMinimumSize(new java.awt.Dimension(1050, 350));
+        setPreferredSize(new java.awt.Dimension(1050, 350));
 
         jMenu1.setText("Fichier");
 
@@ -241,8 +216,8 @@ public class Calendar extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(recipeView, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
-            .addComponent(calendarView, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(calendarView, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+            .addComponent(recipeView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -281,8 +256,7 @@ public class Calendar extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Calendar.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);

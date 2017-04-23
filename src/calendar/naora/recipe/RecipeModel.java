@@ -5,6 +5,7 @@
  */
 package calendar.naora.recipe;
 
+import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,6 +26,7 @@ public class RecipeModel extends AbstractListModel<Recipe> implements Serializab
     private int searchType;
     private ArrayList<Recipe> filteredRecipes = new ArrayList<>();
     private Pattern regex = Pattern.compile(filter);
+    private transient ActionListener saveListener;
     
     //last delete element
     private Recipe recipeDeleted = null;
@@ -93,7 +95,12 @@ public class RecipeModel extends AbstractListModel<Recipe> implements Serializab
             recipes.sort(comparator);
             updateFilter();
             fireContentsChanged(this, 0, 0);
+            saveListener.actionPerformed(null);
         }
+    }
+    
+    public void addSaveListener(ActionListener l) {
+        saveListener = l;
     }
     
     public void delete(int index){
@@ -101,7 +108,8 @@ public class RecipeModel extends AbstractListModel<Recipe> implements Serializab
         recipes.remove(recipeDeleted);
         updateFilter();
         if(recipeDeleted != null)
-            fireIntervalRemoved(this, index, index);
+            fireIntervalRemoved(this, index, index);        
+        saveListener.actionPerformed(null);
     }
 
     @Override
@@ -116,7 +124,8 @@ public class RecipeModel extends AbstractListModel<Recipe> implements Serializab
     
     public void recipeUpdated(int index){
         recipeUpdated = filter.isEmpty() ? recipes.get(index) : filteredRecipes.get(index);
-        fireContentsChanged(this, index, index);
+        fireContentsChanged(this, index, index);        
+        saveListener.actionPerformed(null);
     }
     
     public Recipe getUpdatedRecipe(){
